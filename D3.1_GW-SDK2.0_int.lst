@@ -1,0 +1,140 @@
+
+Commits in the cable since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+3f63a97 Merge pull request #67 in SW_ARM/cable from BugFix/DOCSISSW-879 to D3.1_GW-SDK2.0_int
+ac226cc Merge pull request #66 in SW_ARM/cable from BugFix/DOCSISSW-881 to D3.1_GW-SDK2.0_int
+ada2fb2 DOCSISSW-879 - CgP | ifOutMulticastPkts on ETH interface counts US packets also
+7dafe62 DOCSISSW-881 - CgP 2SW |result for 'dot1dBasePort' mib is not match to 'dot1dBaseNumPorts' Mib result
+46c31a8 Merge pull request #65 in SW_ARM/cable from BugFix/SDK2_0UpdateToUsFw3_2_0_4 to D3.1_GW-SDK2.0_int
+ab9fda7 DOCSISSW-925 : update US FW to ver 3_2_0_4
+83e4375 Merge pull request #62 in SW_ARM/cable from Bug/DOCSISSW-922-UpdateTheFwVersionTo3004 to D3.1_GW-SDK2.0_int
+ee7b53c DOCSISSW-922-UpdateTheFwVersionTo3004
+9723276 Merge pull request #61 in SW_ARM/cable from Bug/DOCSISSW-915PlcSyncLoss to D3.1_GW-SDK2.0_int
+7d2f59f DOCSISSW-915 PlcSyncLoss
+d389d4b Merge pull request #59 in SW_ARM/cable from feature/MereProfileUpdateSupport_DOCSISSW-911 to D3.1_GW-SDK2.0_int
+9c49d5c DOCSISSW-911: merge HSD_245844 :adding profile update support
+aa994f0 HSD Link:https://vthsd.intel.com/hsd/ceswe/unified_defect/default.aspx?unified_defect_id=HSD_245844  merge hal changes
+d62178e Merge pull request #55 in SW_ARM/cable from MicroReflection/AddedMicroReflectionCalculationAndUnifiedRelevantFunctions to D3.1_GW-SDK2.0_int
+9841dd5 DOCSISSW-908 MIB docsIfSigQMicroreflections calculation added
+a5af0c6 Merge pull request #52 in SW_ARM/cable from bugfix/DOCSISSW-904-copy-us-hsif-errors-due-to-moca to D3.1_GW-SDK2.0_int
+a321956 ARMBUILDSW-DOCSISSW-904 US HSIF errors due to Moca enabled in high temp
+5937943 Merge pull request #51 in SW_ARM/cable from Feature/ECN_FEC to D3.1_GW-SDK2.0_int
+65625e0 DOCSISSW-902 ECN FEC - Data Type for FEC Summary Bulk Data File
+b4285fe Merge pull request #50 in SW_ARM/cable from EsdTestIssue/UsHsifAndWbTunerRestartedTuFixEsdTestIssues to D3.1_GW-SDK2.0_int
+fd5f284 DOCSISSW-900 - ESD workaround: Us Hsif and WB tuner restart
+bc00ad6 Merge pull request #48 in SW_ARM/cable from feature_HSD_247408_ECN_cahges_to_tilt_slope_ripple_and_group_delay_calclations to D3.1_GW-SDK2.0_int
+ad4557d DOCSISSW-898: ECN_cahges_to_tilt_slope_ripple_and_group_delay_calclations [merge from sdk7.0]
+543af13 Merge pull request #47 in SW_ARM/cable from feature_HSD_247673_ECN-CM-OSSIv3.1-16.1508_CEA_channels_used_for_Power_Reporting to D3.1_GW-SDK2.0_int
+9337d4d DOCSISSW-899: [P7]ECN - CM-OSSIv3.1-16.1508 CEA channels used for Power Reporting [merge from sdk7.0]
+e9fa3f2 Merge pull request #31 in SW_ARM/cable from bugfix/Update_US_FW_3_2_0_3 to D3.1_GW-SDK2.0_int
+a3d37e6 DOCSISSW-862 : update us FW to version 3_2_0_3(fix max request size
+def0fa3 Merge pull request #24 in SW_ARM/cable from BugFix/DOCSISSW-848 to D3.1_GW-SDK2.0_int
+7e966a7 DOCSISSW-848 T3 timeouts during and after registration on SC-QAM CASA100G setup
+07f1feb Merge pull request #23 in SW_ARM/cable from Feature/DOCSISSW-849_CM-OSSIv3.1-N-15.1418-2-TxPsd_new_mib to D3.1_GW-SDK2.0_int
+97835cb DOCSISSW-788 CM-OSSIv3.1-N-15.1418-2 - TxPsd new mib
+4aab74d Merge pull request #21 in SW_ARM/cable from bugfix/DOCSISSW-846-cm-ossiv3.1-n-16.1422-4 to D3.1_GW-SDK2.0_int
+9b53db2 bugfix/DOCSISSW-846-cm-ossiv3.1-n-16.1422-4
+5962bc7 Merge pull request #20 in SW_ARM/cable from bugfix/DOCSISSW-845-cm-ossiv3.1-n-16.1515-1 to D3.1_GW-SDK2.0_int
+4f378e5 bugfix/DOCSISSW-845-cm-ossiv3.1-n-16.1515-1
+23792fa Merge pull request #16 in SW_ARM/cable from bugfix/DOCSISSW-844-cm-ossiv3.1-n-16.1497-1 to D3.1_GW-SDK2.0_int
+deaed53 Merge pull request #15 in SW_ARM/cable from bugfix/DOCSISSW-843-cm-ossiv3.1-n-16.1492-2 to D3.1_GW-SDK2.0_int
+082fdd5 Merge pull request #18 in SW_ARM/cable from bugfix/DOCSISSW-847-p7-align-cm-mibs-with-latest to D3.1_GW-SDK2.0_int
+def0f10 DOCSISSW-847-p7-align-cm-mibs-with-latest
+7f2aea2 DOCSISSW-844-cm-ossiv3.1-n-16.1497-1
+6b69ad3 bugfix/DOCSISSW-843-cm-ossiv3.1-n-16.1492-2
+
+Commits in the common since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+a9c90ce Merge pull request #72 in SW_ARM/common from bugfix/ARMSYSSW-717-detach-ruli-from-proprietary to D3.1_GW-SDK2.0_int
+bdfdd72 ARMSYSSW-717-detach-ruli-from-proprietary: fix intel_dns_app license
+5f9a980 ARMSYSSW-717-detach-ruli-from-proprietary: add intel_dns_app to packaging
+d3c9df4 Merge pull request #69 in SW_ARM/common from bugfix/ARMSYSSW-717-detach-ruli-from-proprietary to D3.1_GW-SDK2.0_int
+13872cc bugfix/ARMSYSSW-717-detach-ruli-from-proprietary Fixed issue with several DNS
+38ebb94 bugfix/ARMSYSSW-717-detach-ruli-from-proprietary Aligned with latest SDK4.5
+32fec52 ARMSYSSW-717 Detach ruli from proprietary code - R2.0
+
+Commits in the dspg since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+
+Commits in the il_gwdk since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+cd61579 Merge pull request #46 in SW_ARM/il_gwdk from bugfix/ARMSYSSW-717-detach-ruli-from-proprietary to D3.1_GW-SDK2.0_int
+ce96e75 bugfix/ARMSYSSW-717-detach-ruli-from-proprietary Aligned with latest SDK4.5
+40802f5 Merge pull request #21 in SW_ARM/il_gwdk from BugFix/CleanUnusedCodeFromSDK to D3.1_GW-SDK2.0_int
+8170c04 ARMBUILDSW-283 - Clean unused code from SDK - Remove unused definition
+cedd93d ARMBUILDSW-283 Clean unused code from SDK - Remove unused code - empty functions and definitions
+a396af3 index on BugFix/CleanUnusedCodeFromSDK: 489b85f ARMBUILDSW-283 Clean unused code from SDK - Removed hunter creek sources and related code
+8199da7 ARMBUILDSW-283 Clean unused code from SDK - Removed hunter creek sources and related code
+
+Commits in the linux-3.12.14 since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+a6c3b3c Merge pull request #30 in SW_ARM/arm-intelce-kernel from bugfix/MOCASW-115-p7-moca2.0-intermittent-moca-system to D3.1_GW-SDK2.0_int
+8b04f18 MOCASW-115: Modphy Powerup Configuration fixes
+d13ca5d Merge pull request #23 in SW_ARM/arm-intelce-kernel from Feature/LinuxKernelVulnerability-2.0 to D3.1_GW-SDK2.0_int
+2db9c10 ARMSYSSW-704 CVE-2016-5696 Shared Challenge ACK Linux Kernel Vulnerability
+
+Commits in the M5T since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+
+Commits in the pp since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+
+Commits in the psp since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+
+Commits in the sinicnet since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+
+Commits in the synopsys-gbe since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+
+Commits in the system since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+1221b15 Merge pull request #4 in SW_ARM/system from BugFix/CleanUnusedCodeFromSDK to D3.1_GW-SDK2.0_int
+2cfb21c ARMBUILDSW-283 - Clean unused code from SDK - Merge from R7.0
+
+Commits in the ua_sdk since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+4f97789 Merge pull request #23 in SW_ARM/ua_sdk from SW-INTERNAL/releaseUpdate to D3.1_GW-SDK2.0_int
+04a08cf release.h update
+a2f0a56 Merge pull request #16 in SW_ARM/ua_sdk from SW-INTERNAL/updateReleaseH to D3.1_GW-SDK2.0_int
+fb5efdd SW-INTERNAL - release.h update
+052b334 Merge pull request #14 in SW_ARM/ua_sdk from SW-INTERNAL/updateReleaseH to D3.1_GW-SDK2.0_int
+819b647 SW-INTERNAL - release.h update
+e837055 Merge pull request #13 in SW_ARM/ua_sdk from SW-INTERNAL/updateReleaseH to D3.1_GW-SDK2.0_int
+b5ae2f0 SWINTERNAL - update release.h
+6f03b35 Merge pull request #11 in SW_ARM/ua_sdk from release.h to D3.1_GW-SDK2.0_int
+5c99c6a ARMBUILDSW-release.h
+dcc4646 Merge pull request #8 in SW_ARM/ua_sdk from BugFix/CleanUnusedCodeFromSDK to D3.1_GW-SDK2.0_int
+0b0cc44 ARMBUILDSW-283 - Clean unused code from SDK - Remove psp_uboot symlink
+7c1bb27 ARMBUILDSW-283 Clean unused code from SDK - Removed hunter creek sources and related code
+0c39c4f ARMBUILDSW-283 Clean unused code from SDK - Removed hunter_creek sources
+7cad46b update release.h
+
+Commits in the uimage since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+
+Commits in the voice since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+
+861c4b5 Merge pull request #25 in SW_ARM/voice from bugfix/ARMSYSSW-717-detach-ruli-from-proprietary to D3.1_GW-SDK2.0_int
+fd100e7 bugfix/ARMSYSSW-717-detach-ruli-from-proprietary Aligned with latest SDK4.5
+c366bd8 Merge pull request #12 in SW_ARM/voice from BugFix/CleanUnusedCodeFromSDK to D3.1_GW-SDK2.0_int
+9d26675 ARMBUILDSW-283 Clean unused code from SDK - Removed hunter creek sources and related code
+
+Commits in the wifi-proxy since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_int
+--------------------------------------------------------------------------------
+

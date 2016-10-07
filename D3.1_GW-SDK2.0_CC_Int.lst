@@ -1,0 +1,121 @@
+
+Commits in the cable since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+0b45c5f Merge pull request #100 in SW_ARM/cable from BugFix/SDK2_0_CC_UpdateToUsFw3_2_0_4 to D3.1_GW-SDK2.0_CC_Int
+a445469 DOCSISSW-925 : update US FW to ver 3_2_0_4
+5f513d9 Merge pull request #94 in SW_ARM/cable from feature/MOCASW-108-MoCA11-MIB-support-CCint to D3.1_GW-SDK2.0_CC_Int
+a970129 MOCASW-108: P7 MoCA2.0 - Support MoCA 1.1 MIB
+1344652 Merge pull request #92 in SW_ARM/cable from bugfix/PUMAGWRDKBSW-686-fix_for_jira-2034 to D3.1_GW-SDK2.0_CC_Int
+8665665 Merge pull request #93 in SW_ARM/cable from bugfix/PUMAGWRDKBSW-686-docsis-fix-makefile-options-for-puma7 to D3.1_GW-SDK2.0_CC_Int
+84c0e76 Merge pull request #91 in SW_ARM/cable from bugfix/PUMAGWRDKBSW-686-docsis_if_db_debug_msgs to D3.1_GW-SDK2.0_CC_Int
+690ed71 PUMAGWRDKBSW-686 docsis fix makefile options for puma7
+dcbfd64 PUMAGWRDKBSW-686      fix_for_jira-2034
+9f975fc PUMAGWRDKBSW-686 added more debug capabilities to docsis
+83b3e68 Title : DOCSISSW-862 : update us FW to version 3_2_0_3(fix max request size)
+eea399b Title : DOCSIS 769: Bringing snmp chnages from COmcast to Intel.
+c4e3adf DOCSISSW-891-US HSIF errors due to Moca enabled in high temp
+df2e8cb Title : CSISSW-697 handover to NB in low power mode Merging this commit from D3.1_GW-SDK7.0_int branch .
+01d377b DOCSISSW-697 handover to NB in low power mode
+8235852 Merge pull request #8 in SW_ARM/cable from bugfix/MOCASW-112-support-cgp3.0-ctp to D3.1_GW-SDK2.0_CC_Int
+243355d MOCASW-112 : Support CTP Build on CGP 3.0
+
+Commits in the common since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+34fa364 Merge pull request #76 in SW_ARM/common from Feature_BPFragPPFW-26 to D3.1_GW-SDK2.0_CC_Int
+561c864 PPFW-26-Add Support to BP Frag
+351c61b PPFW-26-Add Support to BP Frag
+d1340db Merge pull request #63 in SW_ARM/common from bugfix/MOCASW-113-moca-not-joining-the-network-CCMerge to D3.1_GW-SDK2.0_CC_Int
+4b2ab92 MOCASW-113: MoCA not joining network when configured to operate in D2a
+d107898 Merge pull request #19 in SW_ARM/common from bugfix/MOCASW-127-p7-moca-2.0-moca-device-hangs-ccmerge to D3.1_GW-SDK2.0_CC_Int
+4bd4f8a MOCASW-127 : P7 MoCA 2.0: MoCA device hangs forever when having failed reply from MoCA FW
+9fac0e1 Merge pull request #11 in SW_ARM/common from feature/MOCASW-110-Optional-64-byte-pad to D3.1_GW-SDK2.0_CC_Int
+bc26e41 MOCASW-110 : MoCA Padding mode API
+fb9563b Merge pull request #10 in SW_ARM/common from feature/MOCASW-109-tr069-support to D3.1_GW-SDK2.0_CC_Int
+4145cd8 HSD_1363830 -  MoCA 2.0 : MoCA 1.1 and 2.0 MIB Support - GCAP.20, GCAP.21, GCAP.22, GCAP.23 working
+1bfc940 Merge pull request #9 in SW_ARM/common from bugfix/MOCASW-112-support-cgp3.0-ctp to D3.1_GW-SDK2.0_CC_Int
+53b96a2 MOCASW-112 : Support CTP Build on CGP 3.0
+
+Commits in the dspg since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+
+Commits in the il_gwdk since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+42ba9b5 Merge pull request #29 in SW_ARM/il_gwdk from bugfix/HSD_247388_CC to D3.1_GW-SDK2.0_CC_Int
+88c7132 PUMAGWRDKBSW-616: [P7][RDKB] - Error: Unhandled exception 13 (Broken pipe) (Rule GW_API_PROXY)
+6b9f016 Merge pull request #19 in SW_ARM/il_gwdk from bugfix/jira_docsissw_832_ver2 to D3.1_GW-SDK2.0_CC_Int
+4ea38bc Merge branch 'bugfix/jira_docsissw_832_ver2' of ssh://gts.lantiq.com:29418/sw_arm/il_gwdk into bugfix/jira_docsissw_832_ver2
+534c55c [RDKB] - GWAPIPROXY - CM not operational and stage = 12
+c7a50cb [RDKB] - GWAPIPROXY - CM not operational and stage = 12
+5cd29b7 Merge pull request #15 in SW_ARM/il_gwdk from bugfix/PUMAGWRDKBSW-481_mdd to D3.1_GW-SDK2.0_CC_Int
+8803b5e Title: [WebGUI] CM Parameter field Learned IP Mode & MDD IP Mode Override is not populated correctly in the GUI page Issue: PUMAGWRDKBSW-481 IssueType: Defect Symptom: CM Parameter field named "Learned IP Mode & "MDD IP Mode Override" are not populated correctly in the GUI page. RootCause: HAL API was returning value of SetMimo mode instead of IpProv & MDD IP mode. Resolution: Corrected the implementation of HAL APIs. Attestation: I confirm that I understand the authorized content and license obligations listed in the IP Plan(s) for the SDK release and I have delivered content in accordance with those IP Plan(s): Yes. Approvers: gerrit commitment <reviewers: Piyush Jhamb, Prakash Chandra, Arunkumar Velayutham, Subrat Behera>
+9930c14 Merge pull request #10 in SW_ARM/il_gwdk from bugfix/CC_246357 to D3.1_GW-SDK2.0_CC_Int
+4a07c6a Title: [RDKB] Segmentation fault in gw_api_proxy_server Issue: HSD:246357 IssueType: Defect Symptom: Sometimes gw_api_proxy_server will crash when starting with segment fault RootCause: Global variables defined in header file resuling in multiple definition Resolution: Move global variables to proper place, clean up some prints Attestation: I confirm that I understand the authorized content and license obligations listed in the IP Plan(s) for the SDK release and I have delivered content in accordance with those IP Plan(s): Yes. Approvers: <BitBucket review in progress>
+8cdd3d3 Merge pull request #6 in SW_ARM/il_gwdk from bugfix/HSD_247365 to D3.1_GW-SDK2.0_CC_Int
+1b6a2d1 Title: [RDKB] [HAL API]INT cm_hal_GetDHCPInfo(PCMMGMT_CM_DHCP_INFO pInfo) failing Issue: HSD:247365 IssueType: Defect Symptom: dmcli was returning BootfileName as blank. RootCause: Implementation of BootfileName param was missing. Resolution: Ported the changes from SDK7.0 branch. Attestation: I confirm that I understand the authorized content and license obligations listed in the IP Plan(s) for the SDK release and I have delivered content in accordance with those IP Plan(s): Yes. Approvers: gerrit commitment <reviewers: Piyush Jhamb, Prakash Chandra, Arunkumar Velayutham, Subrat Behera>
+
+Commits in the linux-3.12.14 since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+8518dfc Merge pull request #40 in SW_ARM/arm-intelce-kernel from Feature_BPFragPPFW-26 to D3.1_GW-SDK2.0_CC_Int
+797b8db PPFW-26-Add Support to BP Frag
+c7c3441 Merge pull request #35 in SW_ARM/arm-intelce-kernel from bugfix/MOCASW-115-modphy-fixes-CCMerge to D3.1_GW-SDK2.0_CC_Int
+74933eb MOCASW-115: Modphy Powerup Configuration fixes
+f09d6a7 ARMSYSSW-704 CVE-2016-5696 Shared Challenge ACK Linux Kernel Vulnerability
+
+Commits in the M5T since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+
+Commits in the pp since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+89ba98b Merge pull request #24 in SW_ARM/pp from Feature_BPFragPPFW-26 to D3.1_GW-SDK2.0_CC_Int
+c833498 PPFW-26-Add Support to BP Frag
+
+Commits in the psp since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+
+Commits in the sinicnet since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+
+Commits in the synopsys-gbe since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+
+Commits in the system since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+
+Commits in the ua_sdk since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+eddc6bd Merge pull request #20 in SW_ARM/ua_sdk from bugfix/PUMAGWRDKBSW-686-update-version-201 to D3.1_GW-SDK2.0_CC_Int
+458f0d0 PUMAGWRDKBSW-686 update version to 201
+12ec78a PUMAGWRDKBSW-686 update version to 201
+bd2d5db update release.h to 2.0.2.200
+
+Commits in the uimage since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+
+Commits in the voice since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+36aa398 Merge pull request #22 in SW_ARM/voice from bugfix/PUMAGWRDKBSW-686-debug_patch_1981 to D3.1_GW-SDK2.0_CC_Int
+cc2bf8c PUMAGWRDKBSW-686 Fix typo in commit
+a08af8e Merge pull request #21 in SW_ARM/voice from bugfix/PUMAGWRDKBSW-686-debug_patch_1981 to D3.1_GW-SDK2.0_CC_Int
+02b6c78 Merge pull request #20 in SW_ARM/voice from bugfix/PUMAGWRDKBSW-686-rtl8366sc to D3.1_GW-SDK2.0_CC_Int
+4e818e6 PUMAGWRDKBSW-686  From comcast patches
+5d10692 Integrate meta-intelce-arm/recipes-core/downloaders/files/rtl8366sc.c.patch to thirdparty/realtek/rtl8366sc/src/rtl8366sc.c This change needed to aplly comcast patches on rtl8366sc.c.
+
+Commits in the wifi-proxy since D3.1_GW-SDK2.0.0.40 for the * D3.1_GW-SDK2.0_CC_Int
+--------------------------------------------------------------------------------
+
+e34e215 Merge pull request #3 in SW_ARM/wifi-proxy from feature/HSD_247358 to D3.1_GW-SDK2.0_CC_Int
+1f24591 HSD_247358 - Add wifi netdevice sync message to Atom - Add wifi netdevice sync message to Atom
