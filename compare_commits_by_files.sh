@@ -47,12 +47,7 @@ createFolderStructure(){
 	done
 }
 
-readCommit(){
-	commit=${1}
-	git diff ${1}
-}
-
-analiseDir(){
+analise_dir(){
 	local ARG=${1}
 	local makeInDir=${2}
 	local ARGS=${3}
@@ -66,72 +61,78 @@ analiseDir(){
 	done
 }
 
-analiseRepoDir(){
+analise_repo_dir(){
 	local CUR_DIR=`pwd`
 
 	cd ${CUR_DIR}/${1}
 	echo '>>>>>>>REPO' ${CUR_DIR}/${1}
-	analiseDir NULL "cat" ""
+	analise_dir NULL analiseinfo_file ""
 	echo '<<<<<<<REPO' ${CUR_DIR}/
 
 	cd ${CUR_DIR}/
 }
 
-analiseBranchDir(){
+analise_branch_dir(){
 	local CUR_DIR=`pwd`
+	local branch="$(echo ${1} | sed -e 's,\./,,g')"
 
 	cd ${CUR_DIR}/${1}
 	echo '>>>>>>>BRANCHDIR' ${CUR_DIR}/${1}
-	analiseDir NULL analiseRepoDir ""
+	analise_dir NULL analise_repo_dir ""
 	echo '<<<<<<<BRANCHDIR' ${CUR_DIR}/
 	cd ${CUR_DIR}/
 }
 
-analiseWorkDir(){
+analise_work_dir(){
 	local CUR_DIR=`pwd`
 
 	cd ${CUR_DIR}/${1}
 	echo '>>>>>>>WORKDIR' ${CUR_DIR}/${1}
 
-	analiseDir NULL analiseBranchDir ""
+	analise_dir NULL analise_branch_dir ""
 	echo '<<<<<<<WORKDIR' ${CUR_DIR}/
 
 	cd ${CUR_DIR}/
 }
 
-generateChecksumsFile(){
-		inpFileWithCommits=${1}
-		outpFileWithCommits=${2}
-		branchName=${3}
-		commits=`cat ${inpFileWithCommits}`
-
-		for i in ${commits}; do
-			if [ ! -z "$(echo $i | grep ':')" ]; then
-				echo $i >> ${TOPDIR}/${outpFileWithCommits}
-				cd ${TOPDIR}/$(echo $i | sed -e 's,:,,g')
-				git checkout ${branchName}
-				git pull
-			else
-				#write md5 sums of all changed files in scope of commit
-				git diff ${i}^ ${i} | tail -n +3 |  md5sum | sed -e 's,^,'$i' ,g' -e 's,-,,g' >> ${TOPDIR}/${outpFileWithCommits}
-			fi
-		done
-		cd ${TOPDIR}
+read_commit(){
+	commit=${1}
+	git diff ${1}
 }
 
-grepChecksumm(){
-	inpFileWithCommits=${1}
-	checkFile=${2}
+analiseinfo_file(){
+	local infoFile=${1}
+	local commits=`cat ${infoFile}`
+	local CUR_DIR=`pwd`
+	local commitFile=""
+	local commit=
 
-	checksums="$(cat ${inpFileWithCommits} | grep -v ':')"
 
-	for i in ${checksums}; do
-		var="$(echo $i | sed -e 's,-,,g')"
-		grep ${checkFile} -e "${var}"
+	repo=
+	for i in ${commits}; do
+		if [[ ! -z "$(echo ${i} | grep ':' )" ]]; then
+			repo=${i}
+
+			cd ${TOPDIR}/$(echo ${i} | sed -e 's,:,,g')
+		else
+			commitFile="${i}"
+			commit=${i}
+
+			git diff ${commit}^ ${commit} > ${TOPDIR}/temp
+			touch ${CUR_DIR}/${commitFile}
+			analise_commit ${TOPDIR}/temp ${CUR_DIR}/${commitFile}
+		fi
 	done
+
+	cd ${CUR_DIR}
+	exit
 }
 
-
+analise_commit(){
+	while read line; do
+		echo ${line} | grep -e '+++ b/' -e "^+ " -e "^- " >> ${2}
+	done < ${1}
+}
 
 #==================Main script==================
 
@@ -143,4 +144,4 @@ createFolderStructure ${TOPDIR}/commits_fileCC_int.txt ${branchCC_int2_0}
 createFolderStructure ${TOPDIR}/commits_file_int.txt ${branchInt2_0}
 
 cd ${TOPDIR}
-analiseWorkDir files
+analise_work_dir files
