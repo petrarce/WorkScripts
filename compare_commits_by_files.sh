@@ -97,7 +97,7 @@ analise_work_dir(){
 
 read_commit(){
 	commit=${1}
-	git diff ${1}
+	git diff ${commit}^ ${commit}
 }
 
 analiseinfo_file(){
@@ -106,26 +106,28 @@ analiseinfo_file(){
 	local CUR_DIR=`pwd`
 	local commitFile=""
 	local commit=
-
-
 	repo=
+
 	for i in ${commits}; do
 		if [[ ! -z "$(echo ${i} | grep ':' )" ]]; then
-			repo=${i}
+			repo=$(echo ${i} | sed -e 's,:,,g')
 
-			cd ${TOPDIR}/$(echo ${i} | sed -e 's,:,,g')
+			if [[ ! -d ${TOPDIR}/${repo} ]]; then
+				return
+			fi
+			cd ${TOPDIR}/${repo}
+			git checkout ${branch}
 		else
 			commitFile="${i}"
 			commit=${i}
 
-			git diff ${commit}^ ${commit} > ${TOPDIR}/temp
+			read_commit ${commit} > ${TOPDIR}/temp
 			touch ${CUR_DIR}/${commitFile}
 			analise_commit ${TOPDIR}/temp ${CUR_DIR}/${commitFile}
 		fi
 	done
 
 	cd ${CUR_DIR}
-	exit
 }
 
 analise_commit(){
@@ -134,14 +136,51 @@ analise_commit(){
 	done < ${1}
 }
 
+compare_commits(){
+	set -x
+	local branch1=${1}
+	local branch2=${2}
+
+	local reposBranch1=`ls -l ${WORKDIR}/${branch1} | awk '{print $9}'`
+	local commitsBranch1=
+	local commitsBranch2=
+	local COMPARED_CMT_DIR=${WORKDIR}/compared
+
+	mkdir -p ${COMPARED_CMT_DIR}
+	for repo in ${reposBranch1}; do
+		echo ${repo} '>>>>>>REPO'
+		commitsBranch1="$(cat ${WORKDIR}/${branch1}/${repo}/repoInfoFile | grep -v ':')"
+		commitsBranch2="$(cat ${WORKDIR}/${branch2}/${repo}/repoInfoFile | grep -v ':')"
+
+		for cmtB1 in ${commitsBranch1}; do
+			for cmtB2 in ${commitsBranch2}; do
+				echo "\[${branch1}\]-${cmtB1}_\[${branch2}\]-${cmtB2}" > ${COMPARED_CMT_DIR}/${branch1}-${cmtB1}_${branch2}-${cmtB2}
+				while read line; do
+					str="$(grep ${WORKDIR}/${branch2}/${repo}/${cmtB2} -e "${line}")"
+					str=$(echo ${str} | sed -e 's`-`\\-`g' \
+											-e 's`\[`\\[`g' \
+											-e 's`\]`\\]`g')
+					if [[ ! -z "${str}" ]]; then
+						echo ${str} >> ${COMPARED_CMT_DIR}/${branch1}-${repo}-${cmtB1}_${branch2}-${repo}-${cmtB2}
+					fi
+				done < ${WORKDIR}/${branch1}/${repo}/${cmtB1}
+			done
+		done
+	done
+	#make_statistics
+	set +x
+}
+
 #==================Main script==================
 
 #cat ${TOPDIR}/${int_2_0CommitsFiles} | awk '{print $1}' | \
 #	grep -ve "Commits" -ve  "------------"
 
 
-createFolderStructure ${TOPDIR}/commits_fileCC_int.txt ${branchCC_int2_0}
-createFolderStructure ${TOPDIR}/commits_file_int.txt ${branchInt2_0}
+#createFolderStructure ${TOPDIR}/commits_fileCC_int.txt ${branchCC_int2_0}
+#createFolderStructure ${TOPDIR}/commits_file_int.txt ${branchInt2_0}
 
-cd ${TOPDIR}
-analise_work_dir files
+#cd ${TOPDIR}
+#analise_work_dir files
+#compare commits and write them comparation results to temp file
+compare_commits ${branchInt2_0} ${branchCC_int2_0}
