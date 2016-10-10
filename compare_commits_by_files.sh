@@ -1,29 +1,31 @@
 #!/bin/bash
-##set -x
-#================dirs structure================
+#================VARIABLES================
+#----Common variables
 TOPDIR=`pwd`
 WORKDIR=${TOPDIR}/files
+tempCommotFile="temp"
 
+#----CC_to_int variables
 CC_int_2_0ChecksumsFile='2_0_CC_int.checksums'
+reposWithCommitsCC_int_2_0File='commits_fileCC_int.txt'
+CC_int_2_0Commits=''
+CC_int_2_0Commits=`cat ${TOPDIR}/${reposWithCommitsCC_int_2_0File}`
+branchCC_int2_0='D3.1_GW-SDK2.0_CC_Int'
+
+#----2.0_int_variables
 int_2_0ChecksumsFile='2_0_int.checksums'
+reposWithCommits_int_2_0File='commits_file_int.txt'
+int_2_0Commits=''
+int_2_0Commits=`cat ${TOPDIR}/${reposWithCommits_int_2_0File}`
+branchInt2_0='D3.1_GW-SDK2.0_int'
+
 natchesFile='cc_int-int.matches'
 
 #CC_int_2_0CommitsFiles='D3.1_GW-SDK2.0_CC_Int.lst'
 #int_2_0CommitsFiles='D3.1_GW-SDK2.0_int.lst'
 
-reposWithCommitsCC_int_2_0File='commits_fileCC_int.txt'
-reposWithCommits_int_2_0File='commits_file_int.txt'
 
-CC_int_2_0Commits=''
-int_2_0Commits=''
 
-CC_int_2_0Commits=`cat ${TOPDIR}/${reposWithCommitsCC_int_2_0File}`
-int_2_0Commits=`cat ${TOPDIR}/${reposWithCommits_int_2_0File}`
-
-branchCC_int2_0='D3.1_GW-SDK2.0_CC_Int'
-branchInt2_0='D3.1_GW-SDK2.0_int'
-
-tempCommotFile="temp"
 #generateChecksumsFile
 #Args:
 #	inpFileWithCommits file where stored commits and their relative repos
@@ -40,9 +42,6 @@ createFolderStructure(){
 			TEMP_WORKDIR=${WORKDIR}/${branchname}/$(echo ${i} | sed -e 's,:,,g')
 			mkdir -p ${TEMP_WORKDIR}; cd ${TEMP_WORKDIR}
 			repoInfoFile="$(echo ${i} | sed -e 's,:,,g')-info"
-			echo "${i}" > ${TEMP_WORKDIR}/repoInfoFile
-		else
-			echo "${i}" >> ${TEMP_WORKDIR}/repoInfoFile
 		fi
 	done
 }
@@ -54,8 +53,6 @@ analise_dir(){
 
 	FILES_LIST=`ls -l | awk '{print $9}'`
 	for i in ${FILES_LIST}; do
-		echo ${CUR_DIR}/${i} =================
-		echo ${ARG} $makeInDir $ARGS
 		${makeInDir} ${i} ${ARGS}
 		sleep 1
 	done
@@ -66,10 +63,11 @@ analise_repo_dir(){
 
 	cd ${CUR_DIR}/${1}
 	echo '>>>>>>>REPO' ${CUR_DIR}/${1}
+
 	analise_dir NULL analiseinfo_file ""
-	echo '<<<<<<<REPO' ${CUR_DIR}/
 
 	cd ${CUR_DIR}/
+	echo '<<<<<<<REPO' ${CUR_DIR}/
 }
 
 analise_branch_dir(){
@@ -78,9 +76,11 @@ analise_branch_dir(){
 
 	cd ${CUR_DIR}/${1}
 	echo '>>>>>>>BRANCHDIR' ${CUR_DIR}/${1}
+
 	analise_dir NULL analise_repo_dir ""
-	echo '<<<<<<<BRANCHDIR' ${CUR_DIR}/
+
 	cd ${CUR_DIR}/
+	echo '<<<<<<<BRANCHDIR' ${CUR_DIR}/
 }
 
 analise_work_dir(){
@@ -90,9 +90,9 @@ analise_work_dir(){
 	echo '>>>>>>>WORKDIR' ${CUR_DIR}/${1}
 
 	analise_dir NULL analise_branch_dir ""
-	echo '<<<<<<<WORKDIR' ${CUR_DIR}/
 
 	cd ${CUR_DIR}/
+	echo '<<<<<<<WORKDIR' ${CUR_DIR}/
 }
 
 read_commit(){
@@ -140,7 +140,6 @@ analise_commit(){
 }
 
 compare_commits(){
-	set -x
 	local branch1=${1}
 	local branch2=${2}
 
@@ -163,7 +162,6 @@ compare_commits(){
 
 		for cmtB1 in ${commitsBranch1}; do
 			for cmtB2 in ${commitsBranch2}; do
-#				echo "\[${branch1}\]-${cmtB1}_\[${branch2}\]-${cmtB2}" > ${COMPARED_CMT_DIR}/${branch1}-${cmtB1}_${branch2}-${cmtB2}
 				fSize1=`ls -l ${WORKDIR}/${branch1}/${repo}/${cmtB1} | awk '{print $5}'`
 				fSize2=`ls -l ${WORKDIR}/${branch2}/${repo}/${cmtB2} | awk '{print $5}'`
 				if [[ "$(echo ${fSize1}'>='${fSize2} | bc -l)" -eq 1 ]]; then
@@ -178,20 +176,9 @@ compare_commits(){
 					fi
 				fi
 				echo "\[${branch1}\]: ${cmtB1} \[${branch2}\]: ${cmtB2} equal\: ${curStat}\%" >>${STAT_FILE}
-#				while read line; do
-#					str="$(grep ${WORKDIR}/${branch2}/${repo}/${cmtB2} -e "${line}")"
-#					str=$(echo ${str} | sed -e 's`-`\\-`g' \
-#											-e 's`\[`\\[`g' \
-#											-e 's`\]`\\]`g')
-#					if [[ ! -z "${str}" ]]; then
-#						echo ${str} >> ${COMPARED_CMT_DIR}/${branch1}-${repo}-${cmtB1}_${branch2}-${repo}-${cmtB2}
-#					fi
-#				done < ${WORKDIR}/${branch1}/${repo}/${cmtB1}
 			done
 		done
 	done
-	#make_statistics
-	set +x
 }
 
 delete_sp_symb(){
@@ -199,14 +186,21 @@ delete_sp_symb(){
 }
 #==================Main script==================
 
-#cat ${TOPDIR}/${int_2_0CommitsFiles} | awk '{print $1}' | \
-#	grep -ve "Commits" -ve  "------------"
+echo "do you want to run this script:[y/n]" && read ANSW
+if [ ! "${ANSW}" == "y" ]; then exit 0; fi
 
+echo "do you want to rebuild all files: [y/n]" && read ANSW
+if [ "${ANSW}" == "y" ]; then
+	rm -rf ${WORKDIR}
+	createFolderStructure ${TOPDIR}/commits_fileCC_int.txt ${branchCC_int2_0}
+	createFolderStructure ${TOPDIR}/commits_file_int.txt ${branchInt2_0}
 
-createFolderStructure ${TOPDIR}/commits_fileCC_int.txt ${branchCC_int2_0}
-createFolderStructure ${TOPDIR}/commits_file_int.txt ${branchInt2_0}
+	cd ${TOPDIR}
+	analise_work_dir files
+fi
 
-cd ${TOPDIR}
-analise_work_dir files
 #compare commits and write them comparation results to temp file
-compare_commits ${branchInt2_0} ${branchCC_int2_0}
+echo "start comparation process:[y/n]" && read ANSW
+if [ "${ANSW}" == "y" ]; then
+	compare_commits ${branchInt2_0} ${branchCC_int2_0}
+fi
