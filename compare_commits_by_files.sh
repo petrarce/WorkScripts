@@ -122,6 +122,9 @@ analiseinfo_file(){
 			commit=${i}
 
 			read_commit ${commit} > ${TOPDIR}/temp
+			delete_sp_symb ${TOPDIR}/temp > ${TOPDIR}/temp1
+			mv ${TOPDIR}/temp1 ${TOPDIR}/temp
+
 			touch ${CUR_DIR}/${commitFile}
 			analise_commit ${TOPDIR}/temp ${CUR_DIR}/${commitFile}
 		fi
@@ -132,7 +135,7 @@ analiseinfo_file(){
 
 analise_commit(){
 	while read line; do
-		echo ${line} | grep -e '+++ b/' -e "^+ " -e "^- " >> ${2}
+		echo ${line} | grep -e '+++ b/' -e "^+" -e "^-" >> ${2}
 	done < ${1}
 }
 
@@ -145,25 +148,45 @@ compare_commits(){
 	local commitsBranch1=
 	local commitsBranch2=
 	local COMPARED_CMT_DIR=${WORKDIR}/compared
+	local STAT_FILE="${COMPARED_CMT_DIR}/statistics.txt"
+	local fSize1=0
+	local fSize2=0
+	local curStat=0
+	echo "" > ${STAT_FILE}
 
 	mkdir -p ${COMPARED_CMT_DIR}
 	for repo in ${reposBranch1}; do
 		echo ${repo} '>>>>>>REPO'
+		echo "${repo}\:" >> ${STAT_FILE}
 		commitsBranch1="$(cat ${WORKDIR}/${branch1}/${repo}/repoInfoFile | grep -v ':')"
 		commitsBranch2="$(cat ${WORKDIR}/${branch2}/${repo}/repoInfoFile | grep -v ':')"
 
 		for cmtB1 in ${commitsBranch1}; do
 			for cmtB2 in ${commitsBranch2}; do
-				echo "\[${branch1}\]-${cmtB1}_\[${branch2}\]-${cmtB2}" > ${COMPARED_CMT_DIR}/${branch1}-${cmtB1}_${branch2}-${cmtB2}
-				while read line; do
-					str="$(grep ${WORKDIR}/${branch2}/${repo}/${cmtB2} -e "${line}")"
-					str=$(echo ${str} | sed -e 's`-`\\-`g' \
-											-e 's`\[`\\[`g' \
-											-e 's`\]`\\]`g')
-					if [[ ! -z "${str}" ]]; then
-						echo ${str} >> ${COMPARED_CMT_DIR}/${branch1}-${repo}-${cmtB1}_${branch2}-${repo}-${cmtB2}
+#				echo "\[${branch1}\]-${cmtB1}_\[${branch2}\]-${cmtB2}" > ${COMPARED_CMT_DIR}/${branch1}-${cmtB1}_${branch2}-${cmtB2}
+				fSize1=`ls -l ${WORKDIR}/${branch1}/${repo}/${cmtB1} | awk '{print $5}'`
+				fSize2=`ls -l ${WORKDIR}/${branch2}/${repo}/${cmtB2} | awk '{print $5}'`
+				if [[ "$(echo ${fSize1}'>='${fSize2} | bc -l)" -eq 1 ]]; then
+					curStat=$(echo "scale=2; ${fSize2}/${fSize1}" | bc -l)
+					if [[ $(echo $(echo "scale=2; ${fSize2}/${fSize1}" | bc -l)'>'0.9 | bc -l) -eq 1 ]]; then
+						meld ${WORKDIR}/${branch1}/${repo}/${cmtB1} ${WORKDIR}/${branch2}/${repo}/${cmtB2}
 					fi
-				done < ${WORKDIR}/${branch1}/${repo}/${cmtB1}
+				else
+					curStat=$(echo "scale=2; ${fSize1}/${fSize2}" | bc -l)
+					if [[ $(echo $(echo "scale=2; ${fSize1}/${fSize2}" | bc -l)'>'0.9 | bc -l) -eq 1 ]]; then
+						meld ${WORKDIR}/${branch1}/${repo}/${cmtB1} ${WORKDIR}/${branch2}/${repo}/${cmtB2}
+					fi
+				fi
+				echo "\[${branch1}\]: ${cmtB1} \[${branch2}\]: ${cmtB2} equal\: ${curStat}\%" >>${STAT_FILE}
+#				while read line; do
+#					str="$(grep ${WORKDIR}/${branch2}/${repo}/${cmtB2} -e "${line}")"
+#					str=$(echo ${str} | sed -e 's`-`\\-`g' \
+#											-e 's`\[`\\[`g' \
+#											-e 's`\]`\\]`g')
+#					if [[ ! -z "${str}" ]]; then
+#						echo ${str} >> ${COMPARED_CMT_DIR}/${branch1}-${repo}-${cmtB1}_${branch2}-${repo}-${cmtB2}
+#					fi
+#				done < ${WORKDIR}/${branch1}/${repo}/${cmtB1}
 			done
 		done
 	done
@@ -171,16 +194,19 @@ compare_commits(){
 	set +x
 }
 
+delete_sp_symb(){
+    cat $1 | sed -e 's`\!``g' -e 's,`,,g' -e 's,\[,,g' -e 's,\],,g' -e 's,\",,g'  -e 's,\*,,g' -e 's,\\,,g' -e 's,\$,,g'
+}
 #==================Main script==================
 
 #cat ${TOPDIR}/${int_2_0CommitsFiles} | awk '{print $1}' | \
 #	grep -ve "Commits" -ve  "------------"
 
 
-#createFolderStructure ${TOPDIR}/commits_fileCC_int.txt ${branchCC_int2_0}
-#createFolderStructure ${TOPDIR}/commits_file_int.txt ${branchInt2_0}
+createFolderStructure ${TOPDIR}/commits_fileCC_int.txt ${branchCC_int2_0}
+createFolderStructure ${TOPDIR}/commits_file_int.txt ${branchInt2_0}
 
-#cd ${TOPDIR}
-#analise_work_dir files
+cd ${TOPDIR}
+analise_work_dir files
 #compare commits and write them comparation results to temp file
 compare_commits ${branchInt2_0} ${branchCC_int2_0}
