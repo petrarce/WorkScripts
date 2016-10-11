@@ -3,6 +3,7 @@
 #----Common variables
 TOPDIR=`pwd`
 WORKDIR=${TOPDIR}/files
+REPOSITORIES_DIR=${TOPDIR}
 tempCommotFile="temp"
 repoInfoFile="repoInfoFile"
 
@@ -19,6 +20,7 @@ int_2_0Commits=`cat ${TOPDIR}/${reposWithCommits_int_2_0File}`
 branchInt2_0='D3.1_GW-SDK2.0_int'
 
 natchesFile='cc_int-int.matches'
+
 
 #CC_int_2_0CommitsFiles='D3.1_GW-SDK2.0_CC_Int.lst'
 #int_2_0CommitsFiles='D3.1_GW-SDK2.0_int.lst'
@@ -89,7 +91,7 @@ analise_branch_dir(){
 	cd ${CUR_DIR}/${1}
 	echo '>>>>>>>BRANCHDIR' ${CUR_DIR}/${1}
 
-	analise_dir analise_repo_dir ""
+	analise_dir analise_repo_dir "${branch}"
 
 	cd ${CUR_DIR}/
 	echo '<<<<<<<BRANCHDIR' ${CUR_DIR}/
@@ -108,24 +110,39 @@ analise_work_dir(){
 }
 
 read_commit(){
-	commit=${1}
+	local commit=${1}
 	git diff ${commit}^ ${commit}
 }
 
+delete_sp_symb(){
+    cat $1 | sed -e 's`\!``g' -e 's,`,,g' -e 's,\[,,g' -e 's,\],,g' -e 's,\",,g'  -e 's,\*,,g' -e 's,\\,,g' -e 's,\$,,g'
+}
+
+#analise_info_file
+#Description - anlises specified info file
+#						 - goes to ropo subdir in REPOSITORIES_DIR
+#						 - switches to specified in 2-nd parameter branch
+#						 - takes all commit diffs from branch specified in info file one by one and saves them to temp file
+#						 - delets all special symbols from temp file and saves result into branch/repo/commit file
+#Args:
+#	infoFile - file with commit information for repo of specif branch
+#	branch - working branch
 analise_info_file(){
 	local infoFile=${1}
+	local branch=${2}
 	local commits=`cat ${infoFile}`
 	local CUR_DIR=`pwd`
-	local commitFile=""
+	local commitFile=
 	local commit=
-	repo=
+	local repo=
 
 	for i in ${commits}; do
 		if [[ ! -z "$(echo ${i} | grep ':' )" ]]; then
+
 			repo=$(echo ${i} | sed -e 's,:,,g')
 
 			if [[ ! -d ${TOPDIR}/${repo} ]]; then
-				return
+				echo "no such ${repo} in ${REPOSITORIES_DIR}" && return
 			fi
 			cd ${TOPDIR}/${repo}
 			git checkout ${branch}
@@ -133,6 +150,7 @@ analise_info_file(){
 			commitFile="${i}"
 			commit=${i}
 
+			#read commit and delete all special symbols from it
 			read_commit ${commit} > ${TOPDIR}/temp
 			delete_sp_symb ${TOPDIR}/temp > ${TOPDIR}/temp1
 			mv ${TOPDIR}/temp1 ${TOPDIR}/temp
@@ -145,6 +163,8 @@ analise_info_file(){
 	cd ${CUR_DIR}
 }
 
+#analise_commit
+#Description - takes only that strings from diff, that starts with + or -
 analise_commit(){
 	while read line; do
 		echo ${line} | grep -e '+++ b/' -e "^+" -e "^-" >> ${2}
@@ -206,9 +226,6 @@ compare_commits(){
 	done
 }
 
-delete_sp_symb(){
-    cat $1 | sed -e 's`\!``g' -e 's,`,,g' -e 's,\[,,g' -e 's,\],,g' -e 's,\",,g'  -e 's,\*,,g' -e 's,\\,,g' -e 's,\$,,g'
-}
 #==================Main script==================
 
 echo "do you want to run this script:[y/n]" && read ANSW
