@@ -8,14 +8,12 @@ tempCommotFile="temp"
 #----CC_to_int variables
 CC_int_2_0ChecksumsFile='2_0_CC_int.checksums'
 reposWithCommitsCC_int_2_0File='commits_fileCC_int.txt'
-CC_int_2_0Commits=''
 CC_int_2_0Commits=`cat ${TOPDIR}/${reposWithCommitsCC_int_2_0File}`
 branchCC_int2_0='D3.1_GW-SDK2.0_CC_Int'
 
 #----2.0_int_variables
 int_2_0ChecksumsFile='2_0_int.checksums'
 reposWithCommits_int_2_0File='commits_file_int.txt'
-int_2_0Commits=''
 int_2_0Commits=`cat ${TOPDIR}/${reposWithCommits_int_2_0File}`
 branchInt2_0='D3.1_GW-SDK2.0_int'
 
@@ -42,6 +40,9 @@ createFolderStructure(){
 			TEMP_WORKDIR=${WORKDIR}/${branchname}/$(echo ${i} | sed -e 's,:,,g')
 			mkdir -p ${TEMP_WORKDIR}; cd ${TEMP_WORKDIR}
 			repoInfoFile="$(echo ${i} | sed -e 's,:,,g')-info"
+     	echo "${i}" > ${TEMP_WORKDIR}/repoInfoFile
+   	else
+    	echo "${i}" >> ${TEMP_WORKDIR}/repoInfoFile
 		fi
 	done
 }
@@ -139,29 +140,42 @@ analise_commit(){
 	done < ${1}
 }
 
+#Comparing commits
+#parameters:
+#	branch1 - first branch which we compare
+# branch2
+# compAlg - comparation algorithm: s - by size,
+#																	 c - by content of diffs
 compare_commits(){
 	local branch1=${1}
 	local branch2=${2}
+	local compAlg=${3}
+	if [[ -z "${compAlg}" ]]; then compAlg=c; fi
 
 	local reposBranch1=`ls -l ${WORKDIR}/${branch1} | awk '{print $9}'`
-	local commitsBranch1=
-	local commitsBranch2=
-	local COMPARED_CMT_DIR=${WORKDIR}/compared
-	local STAT_FILE="${COMPARED_CMT_DIR}/statistics.txt"
+	local repoCommitsB1=
+	local repoCommitsB2=
+	local RESULT_DIR=${WORKDIR}/compared
+	local STAT_FILE="${RESULT_DIR}/statistics.txt"
 	local fSize1=0
 	local fSize2=0
 	local curStat=0
+
+	#create and clean statistics file
+	mkdir -p ${RESULT_DIR}
 	echo "" > ${STAT_FILE}
 
-	mkdir -p ${COMPARED_CMT_DIR}
 	for repo in ${reposBranch1}; do
+
 		echo ${repo} '>>>>>>REPO'
 		echo "${repo}\:" >> ${STAT_FILE}
-		commitsBranch1="$(cat ${WORKDIR}/${branch1}/${repo}/repoInfoFile | grep -v ':')"
-		commitsBranch2="$(cat ${WORKDIR}/${branch2}/${repo}/repoInfoFile | grep -v ':')"
 
-		for cmtB1 in ${commitsBranch1}; do
-			for cmtB2 in ${commitsBranch2}; do
+		# take list of comparable commits for every branch from repoInfoFile (it remains in every repo directory after analise_work_dir)
+		repoCommitsB1="$(cat ${WORKDIR}/${branch1}/${repo}/repoInfoFile | grep -v ':')"
+		repoCommitsB2="$(cat ${WORKDIR}/${branch2}/${repo}/repoInfoFile | grep -v ':')"
+
+		for cmtB1 in ${repoCommitsB1}; do
+			for cmtB2 in ${repoCommitsB2}; do
 				fSize1=`ls -l ${WORKDIR}/${branch1}/${repo}/${cmtB1} | awk '{print $5}'`
 				fSize2=`ls -l ${WORKDIR}/${branch2}/${repo}/${cmtB2} | awk '{print $5}'`
 				if [[ "$(echo ${fSize1}'>='${fSize2} | bc -l)" -eq 1 ]]; then
