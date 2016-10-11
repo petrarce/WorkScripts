@@ -178,6 +178,7 @@ analise_commit(){
 # compAlg - comparation algorithm: s - by size,
 #																	 c - by content of diffs
 compare_commits(){
+	set -x
 	local branch1=${1}
 	local branch2=${2}
 	local compAlg=${3}
@@ -187,45 +188,89 @@ compare_commits(){
 	local repoCommitsB1=
 	local repoCommitsB2=
 	local RESULT_DIR=${WORKDIR}/compared
-	local STAT_FILE="${RESULT_DIR}/statistics.txt"
+	local COMPARED_DIR=""
+	local esultFile=""
+	local statFile="${RESULT_DIR}/statistics.txt"
+	local compared="compared"
 	local fSize1=0
 	local fSize2=0
 	local curStat=0
 
 	#create and clean statistics file
 	mkdir -p ${RESULT_DIR}
-	echo "" > ${STAT_FILE}
+	echo "" > ${statFile}
 
 	for repo in ${reposBranch1}; do
 
 		echo ${repo} '>>>>>>REPO'
-		echo "${repo}\:" >> ${STAT_FILE}
+		echo "${repo}\:" >> ${statFile}
 
 		# take list of comparable commits for every branch from ${repoInfoFile} (it remains in every repo directory after analise_work_dir)
 		repoCommitsB1="$(cat ${WORKDIR}/${branch1}/${repo}/${repoInfoFile} | grep -v ':')"
 		repoCommitsB2="$(cat ${WORKDIR}/${branch2}/${repo}/${repoInfoFile} | grep -v ':')"
-
 		for cmtB1 in ${repoCommitsB1}; do
 			for cmtB2 in ${repoCommitsB2}; do
-				fSize1=`ls -l ${WORKDIR}/${branch1}/${repo}/${cmtB1} | awk '{print $5}'`
-				fSize2=`ls -l ${WORKDIR}/${branch2}/${repo}/${cmtB2} | awk '{print $5}'`
-				if [[ "$(echo ${fSize1}'>='${fSize2} | bc -l)" -eq 1 ]]; then
-					curStat=$(echo "scale=2; ${fSize2}/${fSize1}" | bc -l)
-					if [[ $(echo $(echo "scale=2; ${fSize2}/${fSize1}" | bc -l)'>'0.9 | bc -l) -eq 1 ]]; then
-						meld ${WORKDIR}/${branch1}/${repo}/${cmtB1} ${WORKDIR}/${branch2}/${repo}/${cmtB2}
-					fi
-				else
-					curStat=$(echo "scale=2; ${fSize1}/${fSize2}" | bc -l)
-					if [[ $(echo $(echo "scale=2; ${fSize1}/${fSize2}" | bc -l)'>'0.9 | bc -l) -eq 1 ]]; then
-						meld ${WORKDIR}/${branch1}/${repo}/${cmtB1} ${WORKDIR}/${branch2}/${repo}/${cmtB2}
-					fi
+				if [[ "${compAlg}" == "s" ]]; then
+						fSize1=`ls -l ${WORKDIR}/${branch1}/${repo}/${cmtB1} | awk '{print $5}'`
+						fSize2=`ls -l ${WORKDIR}/${branch2}/${repo}/${cmtB2} | awk '{print $5}'`
 				fi
-				echo "\[${branch1}\]: ${cmtB1} \[${branch2}\]: ${cmtB2} equal\: ${curStat}\%" >>${STAT_FILE}
+				if [[ "${compAlg}" == "c" ]]; then
+					#TODO:: add implementation of comparing by code in diffs
+					COMPARED_DIR=${WORKDIR}/${branch1}/${repo}/${compared}/
+					commonDiffFile=${cmtB1}_${cmtB2}.cdiff
+
+					mkdir ${COMPARED_DIR}
+					echo "" > ${commonDiffFile}
+					set +x
+					create_compared_commits_file "${WORKDIR}/${branch1}/${repo}/${cmtB1}" \
+												 "${WORKDIR}/${branch2}/${repo}/${cmtB2}" \
+												 "${COMPARED_DIR}/${commonDiffFile}" \
+				    set -x
+
+					fSize1=`ls -l ${WORKDIR}/${branch1}/${repo}/${cmtB1} | awk '{print $5}'`
+					fSize2=`ls -l ${COMPARED_DIR}/${commonDiffFile} | awk '{print $5}'`
+				fi
+
+				curStat="$(compare_by_filesize ${fSize1} ${fSize2})"
+				echo "[${branch1}]: ${cmtB1} [${branch2}]: ${cmtB2} equal: ${curStat}%" >>${statFile}
+				sleep 5
 			done
 		done
 	done
+	set +x
 }
 
+compare_by_filesize(){
+	local fSize1=${1}
+	local fSize2=${2}
+
+	local curStat=""
+	if [[ "$(echo ${fSize1}'>='${fSize2} | bc -l)" -eq 1 ]]; then
+		curStat=$(echo "scale=2; ${fSize2}/${fSize1}" | bc -l)
+	else
+		curStat=$(echo "scale=2; ${fSize1}/${fSize2}" | bc -l)
+	fi
+
+	if [[ $(echo $(echo ${curStat} | bc -l)'>'0.9 | bc -l) -eq 1 ]]; then
+		meld ${WORKDIR}/${branch1}/${repo}/${cmtB1} ${WORKDIR}/${branch2}/${repo}/${cmtB2}
+	fi
+}
+
+create_compared_commits_file(){
+	set -x
+	local cmtB1=${1}
+	local cmtB2=${2}
+
+	local commonDiffFile=${3}
+
+	while read line; do
+		if [[ ! -z "$(grep ${cmtB2} -e \"${line}\")" ]]; then
+			echo "${line}" >> ${commonDiffFile}
+		fi
+		sleep 5
+	done < ${cmtB1}
+	set +x
+}
 #==================Main script==================
 
 echo "do you want to run this script:[y/n]" && read ANSW
@@ -246,5 +291,5 @@ fi
 #compare commits and write them comparation results to temp file
 echo "start comparation process:[y/n]" && read ANSW
 if [ "${ANSW}" == "y" ]; then
-	compare_commits ${branchInt2_0} ${branchCC_int2_0}
+	compare_commits ${branchInt2_0} ${branchCC_int2_0} c
 fi
