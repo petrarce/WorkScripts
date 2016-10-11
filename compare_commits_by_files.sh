@@ -4,6 +4,7 @@
 TOPDIR=`pwd`
 WORKDIR=${TOPDIR}/files
 tempCommotFile="temp"
+repoInfoFile="repoInfoFile"
 
 #----CC_to_int variables
 CC_int_2_0ChecksumsFile='2_0_CC_int.checksums'
@@ -24,40 +25,50 @@ natchesFile='cc_int-int.matches'
 
 
 
-#generateChecksumsFile
+#createFolderStructure
+#Description - the dunction creates branch folder and repo folders in it
+# and deploys them with repoInfoFile, which contains reponame, and commits, of this repo
+#	that should be compared
 #Args:
-#	inpFileWithCommits file where stored commits and their relative repos
-#	outpFileWithCommits - file where wi will putt checksums
+#	commtsData content of file with commits of specific branch, that should be compared
 #	branchName - branch on which we are working
 createFolderStructure(){
-	dataFile=`cat ${1}`
-	branchname=${2}
-	repoInfoFile=""
+	local commtsData=`cat ${1}`
+	local branchName=${2}
 
-	mkdir -p ${WORKDIR}/${branchname}
-	for i in ${dataFile}; do
+	local REPO_DIR=
+
+	mkdir -p ${WORKDIR}/${branchName}
+	for i in ${commtsData}; do
 		if [[ ! -z "$(echo ${i} | grep ":" )" ]]; then
-			TEMP_WORKDIR=${WORKDIR}/${branchname}/$(echo ${i} | sed -e 's,:,,g')
-			mkdir -p ${TEMP_WORKDIR}; cd ${TEMP_WORKDIR}
-			repoInfoFile="$(echo ${i} | sed -e 's,:,,g')-info"
-     	echo "${i}" > ${TEMP_WORKDIR}/repoInfoFile
+			REPO_DIR=${WORKDIR}/${branchName}/$(echo ${i} | sed -e 's,:,,g')
+			mkdir -p ${REPO_DIR}; cd ${REPO_DIR}
+     	echo "${i}" > ${REPO_DIR}/${repoInfoFile}
    	else
-    	echo "${i}" >> ${TEMP_WORKDIR}/repoInfoFile
+    	echo "${i}" >> ${REPO_DIR}/${repoInfoFile}
 		fi
 	done
 }
 
+#analise_dir
+#Description - anlise dir watches onto the directory, and for each entry in this directory
+# it call ${func} and gives it as parameters
+#														-entry which was found in directory
+#														-additional parameters, which was given by caller of analise_dir
+#
+#Args:
+#	func - function, which will be called from  analise_dir
+#	ARGS - arguments, that will be passed to ${func}
 analise_dir(){
-	local ARG=${1}
-	local makeInDir=${2}
-	local ARGS=${3}
+	local func=${1}
+	local ARGS=${2}
 
 	FILES_LIST=`ls -l | awk '{print $9}'`
 	for i in ${FILES_LIST}; do
-		${makeInDir} ${i} ${ARGS}
-		sleep 1
+		${func} ${i} ${ARGS}
 	done
 }
+#analise_repo_dir
 
 analise_repo_dir(){
 	local CUR_DIR=`pwd`
@@ -65,7 +76,7 @@ analise_repo_dir(){
 	cd ${CUR_DIR}/${1}
 	echo '>>>>>>>REPO' ${CUR_DIR}/${1}
 
-	analise_dir NULL analiseinfo_file ""
+	analise_dir analise_info_file ""
 
 	cd ${CUR_DIR}/
 	echo '<<<<<<<REPO' ${CUR_DIR}/
@@ -78,7 +89,7 @@ analise_branch_dir(){
 	cd ${CUR_DIR}/${1}
 	echo '>>>>>>>BRANCHDIR' ${CUR_DIR}/${1}
 
-	analise_dir NULL analise_repo_dir ""
+	analise_dir analise_repo_dir ""
 
 	cd ${CUR_DIR}/
 	echo '<<<<<<<BRANCHDIR' ${CUR_DIR}/
@@ -90,7 +101,7 @@ analise_work_dir(){
 	cd ${CUR_DIR}/${1}
 	echo '>>>>>>>WORKDIR' ${CUR_DIR}/${1}
 
-	analise_dir NULL analise_branch_dir ""
+	analise_dir analise_branch_dir ""
 
 	cd ${CUR_DIR}/
 	echo '<<<<<<<WORKDIR' ${CUR_DIR}/
@@ -101,7 +112,7 @@ read_commit(){
 	git diff ${commit}^ ${commit}
 }
 
-analiseinfo_file(){
+analise_info_file(){
 	local infoFile=${1}
 	local commits=`cat ${infoFile}`
 	local CUR_DIR=`pwd`
@@ -170,9 +181,9 @@ compare_commits(){
 		echo ${repo} '>>>>>>REPO'
 		echo "${repo}\:" >> ${STAT_FILE}
 
-		# take list of comparable commits for every branch from repoInfoFile (it remains in every repo directory after analise_work_dir)
-		repoCommitsB1="$(cat ${WORKDIR}/${branch1}/${repo}/repoInfoFile | grep -v ':')"
-		repoCommitsB2="$(cat ${WORKDIR}/${branch2}/${repo}/repoInfoFile | grep -v ':')"
+		# take list of comparable commits for every branch from ${repoInfoFile} (it remains in every repo directory after analise_work_dir)
+		repoCommitsB1="$(cat ${WORKDIR}/${branch1}/${repo}/${repoInfoFile} | grep -v ':')"
+		repoCommitsB2="$(cat ${WORKDIR}/${branch2}/${repo}/${repoInfoFile} | grep -v ':')"
 
 		for cmtB1 in ${repoCommitsB1}; do
 			for cmtB2 in ${repoCommitsB2}; do
@@ -202,6 +213,8 @@ delete_sp_symb(){
 
 echo "do you want to run this script:[y/n]" && read ANSW
 if [ ! "${ANSW}" == "y" ]; then exit 0; fi
+
+#TODO:: make creation of commits_fileCC_int.txt and commits_file_int.txt
 
 echo "do you want to rebuild all files: [y/n]" && read ANSW
 if [ "${ANSW}" == "y" ]; then
