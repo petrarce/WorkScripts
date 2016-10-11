@@ -115,7 +115,16 @@ read_commit(){
 }
 
 delete_sp_symb(){
-    cat $1 | sed -e 's`\!``g' -e 's,`,,g' -e 's,\[,,g' -e 's,\],,g' -e 's,\",,g'  -e 's,\*,,g' -e 's,\\,,g' -e 's,\$,,g'
+    cat $1 | sed -e 's`\!``g' \
+				 -e 's,`,,g' \
+				 -e 's,\[,,g' \
+				 -e 's,\],,g' \
+				 -e 's,\",,g' \
+				 -e 's,\*,,g' \
+				 -e 's,\\,,g' \
+				 -e 's,\$,,g' \
+				 -e 's,\-,,g' \
+				 -e 's,\+,,g'
 }
 
 #analise_info_file
