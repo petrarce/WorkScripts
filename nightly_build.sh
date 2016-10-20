@@ -15,7 +15,7 @@
 #!/bin/bash
 #==================VARIABLES=================
 #-----Generic
-TOPDIR=${1}
+cd ${1}; TOPDIR=`pwd`; cd -
 if [ -z "${2}" ]; then WORKDIR=${TOPDIR}/xb6_comcast_bugtest_$(date +%d-%m-%Y_%H-%M-%S)
                   else WORKDIR=${TOPDIR}/${2} ;fi
 DL_DIR=${TOPDIR}/downloads
