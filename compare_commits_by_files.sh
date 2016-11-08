@@ -56,8 +56,8 @@ createFolderStructure(){
 #analise_dir
 #Description - anlise dir watches onto the directory, and for each entry in this directory
 # it call ${func} and gives it as parameters
-#														-entry which was found in directory
-#														-additional parameters, which was given by caller of analise_dir
+#			-entry which was found in directory
+#			-additional parameters, which was given by caller of analise_dir
 #
 #Args:
 #	func - function, which will be called from  analise_dir
@@ -284,8 +284,16 @@ compare_by_filesize(){
 	fi
 
 	if [[ $(echo $(echo ${curStat} | bc -l)'>'0.01 | bc -l) -eq 1 ]]; then
-		meld ${WORKDIR}/${branch1}/${repo}/${cmtB1} ${WORKDIR}/${branch2}/${repo}/${cmtB2} &
-		meld ${WORKDIR}/${branch2}/${repo}/${cmtB2} ${COMPARED_DIR}/${commonDiffFile}
+		echo "commits ${cmtB1} and ${cmtB2} are ${curStat} equal. Open meld?[y/n]" && read ANSW
+		if [ "${ANSW}" == "y" ]; then
+			meld ${WORKDIR}/${branch1}/${repo}/${cmtB1} ${WORKDIR}/${branch2}/${repo}/${cmtB2} &
+			meld ${WORKDIR}/${branch2}/${repo}/${cmtB2} ${COMPARED_DIR}/${commonDiffFile} &
+		fi
+		echo "reject ${cmtB1} and ${cmtB2}?" && read ANSW
+		if [ "${ANSW}" == "y" ]; then
+			#TODO: save rejected commit list
+		fi
+
 	fi
 	echo ${curStat}
 }
@@ -316,6 +324,7 @@ echo "" > ${logfile}
 echo "do you want to rebuild all files: [y/n]" && read ANSW
 if [ "${ANSW}" == "y" ]; then
 	rm -rf ${WORKDIR}
+	#TODO: use cmd parameters instead of hardcoded files
 	createFolderStructure ${TOPDIR}/commits_fileCC_int.txt ${branchCC_int2_0}
 	createFolderStructure ${TOPDIR}/commits_file_int.txt ${branchInt2_0}
 
